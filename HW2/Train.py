@@ -24,7 +24,7 @@ model_path='saved'
 pickel_file='picket_data.pickle'
 class Dataprocessor(Dataset):
     def __init__(self, label_file, files_dir, dictonary, w2i):
-        # def __init__(self):
+      
         self.label_file = label_file
         self.files_dir = files_dir
         self.avi = filesreader(label_file)
@@ -122,7 +122,7 @@ def train(model, epoch, train_loader, loss_func):
     model = model
     parameters = model.parameters()
     optimizer = optim.Adam(parameters, lr=1e-4)
-    #scheduler = ReduceLROnPlateau(optimizer, 'min', patience=10)
+   
     running_loss = 0.0
     for batch_idx, batch in enumerate(train_loader):
         avi_feats, ground_truths, lengths = batch
@@ -140,7 +140,7 @@ def train(model, epoch, train_loader, loss_func):
         if batch_idx % 10 == 9:
             print(f"Batch: {batch_idx+1}/{len(train_loader)}, Loss: {running_loss/10:.3f}")
             running_loss = 0.0
-        #scheduler.step(loss)
+       
     loss = loss.item()
     print(f'Epoch:{epoch} & loss:{np.round(loss, 3)}')
 def evaluate(test_loader, model):
@@ -206,13 +206,11 @@ def main():
     files_dir = data_path + 'training_label.json'
     i2w, w2i, dictonary = dictonaryFunc(4)
     
-    # Load the full dataset
+    
     train_dataset = Dataprocessor(label_file, files_dir, dictonary, w2i)
     
-    # Calculate 5% of the dataset size
     total_samples = len(train_dataset)
     
-    # Create a subset of the dataset for training
     train_subset = torch.utils.data.Subset(train_dataset, range(total_samples))
     train_dataloader = DataLoader(dataset=train_subset, batch_size=32, shuffle=True, num_workers=0, collate_fn=minibatch)
 
@@ -220,15 +218,12 @@ def main():
     files_dir = data_path + 'testing_label.json'
     test_dataset = Dataprocessor(label_file, files_dir, dictonary, w2i)
     
-    # Calculate 5% of the test dataset size
     total_test_samples = len(test_dataset)
-   
-    # Create a subset of the dataset for testing
     test_subset = torch.utils.data.Subset(test_dataset, range(total_test_samples))
     test_dataloader = DataLoader(dataset=test_subset, batch_size=32, shuffle=True, num_workers=0, collate_fn=minibatch)
     print(f'Total training samples: {len(train_dataset)}')
     print(f'Training subset samples: {len(train_subset)}')
-    epochs_n = 3
+    epochs_n = 20
     ModelSaveLoc = (model_path)
     with open(pickel_file, 'wb') as f:
         pickle.dump(i2w, f)
