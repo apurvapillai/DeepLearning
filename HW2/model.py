@@ -74,7 +74,7 @@ class DecoderNet(nn.Module):
         _, seq_len, _ = targets.size()
         for i in range(seq_len - 1):
             threshold = self.helper(training_steps=tr_steps)
-            if random.uniform(0.05, 0.995) > threshold:  # returns a random float value between 0.05 and 0.995
+            if random.uniform(0.05, 0.995) > threshold:  
                 current_input_word = targets[:, i]
             else:
                 current_input_word = self.embedding(decoder_ciw).squeeze(1)
