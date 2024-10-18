@@ -7,16 +7,16 @@ import model
 import Train
 import bleu_eval
 
-# Example paths - replace these with your actual paths
-test_data = "MLDS_hw2_1_data/testing_data"  # Path to your test data directory
-test_json = "MLDS_hw2_1_data/testing_label.json"  # Path to your testing labels JSON file
-model_path = "saved/modelarch.h5"  # Path to your saved model architecture
-outputfile_path = "output_file.txt"  # Patṇh where you want to save the output
+
+test_data = "MLDS_hw2_1_data/testing_data" 
+test_json = "MLDS_hw2_1_data/testing_label.json"  
+model_path = "saved/modelarch.h5" 
+outputfile_path = "output_file.txt"  
 
 def main():
-    # Change permissions for the test data ṇdirectory
+   
     try:
-        os.chmod(test_data, 0o755)  # Change permissions
+        os.chmod(test_data, 0o755) 
         
     except PermissionError:
         print("Permission denied!")
@@ -24,21 +24,18 @@ def main():
     # Load the model
     modelIP = torch.load(model_path, weights_only=False)
 
-    # Prepare data
+  
     files_dir = 'MLDS_hw2_1_data/testing_data/feat'
     i2w, w2i, dictionary = Train.dictonaryFunc(4)
     test_dataset = Train.test_dataloader(files_dir)
     test_dataloader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=True, num_workers=8)
 
-    # Perform inference
+  
     model = modelIP
     ss = Train.testfun(test_dataloader, model, i2w)
 
-    # Display one of the outputs (e.g., the first output)
-    if ss:
-        print("First output:", ss[0])  # Display the first output (id, result)
 
-    # Write output to file
+   
     try:
         with open(outputfile_path, 'w') as f:
             for id, s in ss:
